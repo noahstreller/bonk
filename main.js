@@ -232,8 +232,6 @@ function keyUpHandler(e){
 
 }
 
-	
-
 var bricks = [];
 for(var columns = 0; columns < brickColumnCount; columns ++){
 
