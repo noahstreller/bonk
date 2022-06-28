@@ -16,9 +16,7 @@ canvas {
 }
 
 .red {
-
 	animation: red 150ms;
-
 }
 
 @keyframes red {
@@ -33,9 +31,7 @@ canvas {
 }
 
 .woosh {
-
 	animation: woosh 700ms;
-
 }
 
 @keyframes woosh {
