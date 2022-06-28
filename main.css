@@ -1,3 +1,8 @@
+* {
+	transition: 150ms;
+	color: white;
+}
+
 body {
 	margin: 0;
 	background: #1a1a1a;
@@ -7,4 +12,33 @@ canvas {
 	background: #2b2b2b; 
 	display: block; 
 	margin: 0 auto; 
+
+}
+
+.red {
+
+	animation: red 150ms;
+
+}
+
+@keyframes red {
+	from {
+		background: #2b2b2b;
+		transform: rotate(10deg);
+	}
+	to {
+		background: #880000;
+		transform: rotate(0deg)
+	}
+}
+
+.woosh {
+
+	animation: woosh 700ms;
+
+}
+
+@keyframes woosh {
+	from {transform: rotate(360deg)}
+	to {background: #008800;}
 }
