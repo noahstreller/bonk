@@ -41,3 +41,16 @@ canvas {
 	from {transform: rotate(360deg) scale(1.5)}
 	to {background: #008800;}
 }
+
+.paused {
+
+	filter: invert(1);
+
+	animation: pausedanim 300ms;
+
+}
+
+@keyframes pausedanim {
+	from {transform: rotate(-10deg) scale(1.2);}
+	to {transform: rotate(0deg) scale(1.2);}
+}

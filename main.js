@@ -8,8 +8,16 @@ var highscore = document.getElementById("highscore");
 let x = Math.floor(Math.random() * canvas.width);
 let y = canvas.height - 30;
 
+// game settings
+var scoreval = 0;
+var gamenum = 1;
+var gamePaused = false;
+var slowmotion = false;
+var gameSpeed = 1;
+var highscoreval = document.cookie;
+
 // define directions
-let dx = 1;
+let dx = gameSpeed;
 let dy = -dx;
 
 // define ball vars
@@ -35,13 +43,8 @@ var brickOffsetLeft = 30;
 var rightPressed = false;
 var leftPressed = false;
 
-// sets drawinterval
+// sets interval
 var interval = setInterval(draw, 5);
-
-// scoring
-var scoreval = 0;
-var gamenum = 1;
-var highscoreval = document.cookie;
 
 // draws the ball on the canvas
 function drawBall(){
@@ -93,6 +96,7 @@ function drawBricks(){
 
 }
 
+// detects, if a brick was hit
 function detectColisions(){
 
 	for(var c = 0; c < brickColumnCount; c ++){
@@ -103,7 +107,7 @@ function detectColisions(){
 
 			if(b.status == 1){
 
-				if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight){
+				if(x + ballRadius > b.x && x < b.x + brickWidth && y + ballRadius > b.y && y - ballRadius < b.y + brickHeight){
 					dy = -dy;
 					b.status = 0;
 					scoreval ++;
@@ -116,7 +120,8 @@ function detectColisions(){
 							canvas.classList.add("woosh");
 
 							gamenum ++;
-							dx = 1 + (gamenum / 5);
+							gameSpeed = gameSpeed + (gamenum / 5);
+							dx = gameSpeed;
 							dy = -dx;
 							x = Math.floor(Math.random() * canvas.width);
 							y = canvas.height - 30;
@@ -214,14 +219,17 @@ function draw(){
 }
 
 
-// handle keys
+// handle keys and mouse
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
+document.addEventListener("click", pauseGame, false);
 
 function keyDownHandler(e){
 
 	if (e.key == "Right" || e.key == "ArrowRight"){rightPressed = true;}
 	else if (e.key == "Left" || e.key == "ArrowLeft"){leftPressed = true;}
+	else if (e.code == "Space" || e.code == "Spacebar"){slowMotion();}
 
 }
 
@@ -229,6 +237,55 @@ function keyUpHandler(e){
 
 	if (e.key == "Right" || e.key == "ArrowRight"){rightPressed = false;}
 	else if (e.key == "Left" || e.key == "ArrowLeft"){leftPressed = false;}
+	else if (e.key == "Esc" || e.key == "Escape"){pauseGame();}
+	else if (e.code == "Space" || e.code == "Spacebar"){stopSlowMotion();}
+
+}
+
+function mouseMoveHandler(e){
+
+	var relativeX = e.clientX - canvas.offsetLeft;
+	if(relativeX > 0 && relativeX < canvas.width) {paddleX = relativeX - paddleWidth/2;}
+
+}
+
+function pauseGame(){
+
+	if(gamePaused == true){
+
+		interval = setInterval(draw, 5);
+		gamePaused = false;
+		canvas.classList.remove("paused");
+
+	}
+	else {
+
+		clearInterval(interval);
+		gamePaused = true;
+		canvas.classList.add("paused");
+
+	}
+
+}
+
+function slowMotion(){
+
+	if(slowmotion){return;}
+	slowmotion = true;
+
+	clearInterval(interval);
+	interval = setInterval(draw, 20);
+	scoreval -= 10;
+
+	setTimeout(function(){return}, 1000);
+
+}
+
+function stopSlowMotion(){
+
+	clearInterval(interval);
+	interval = setInterval(draw, 5);
+	slowmotion = false;
 
 }
 
